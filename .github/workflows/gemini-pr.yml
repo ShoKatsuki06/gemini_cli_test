@@ -1,21 +1,21 @@
 name: Gemini Auto-Coding Task
 
 on:
-  # 'gemini-task' ラベルが付与されたときに起動
   issues:
     types: [labeled]
-  # 手動トリガー
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 jobs:
   build-and-pr:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Show Event Name
-        run: echo "Workflow triggered by: ${{ github.event_name }}"
+        run: |
+          echo "Workflow triggered by: ${{ github.event_name }}"
 
       - name: Show Issue Context
         run: |
