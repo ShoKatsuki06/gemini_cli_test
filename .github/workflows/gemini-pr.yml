@@ -3,7 +3,11 @@ name: Gemini Auto-Coding Task
 on:
   issues:
     types: [labeled]
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'The issue number to process'
+        required: true
 
 jobs:
   build-and-pr:
@@ -13,16 +17,41 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Get issue number
+        id: get_number
+        run: |
+          if [[ "${{ github.event_name }}" == "issues" ]]; then
+            echo "number=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
+          else
+            echo "number=${{ github.event.inputs.issue_number }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get issue content
+        id: get_content
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue_number = ${{ steps.get_number.outputs.number }};
+            const { data: issue } = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+            });
+            core.setOutput('title', issue.title);
+            core.setOutput('body', issue.body);
+            core.setOutput('number', issue.number);
+
       - name: Show Event Name
         run: |
           echo "Workflow triggered by: ${{ github.event_name }}"
 
       - name: Show Issue Context
         run: |
-          echo "Issue Title: ${{ github.event.issue.title }}"
+          echo "Issue Title: ${{ steps.get_content.outputs.title }}"
           echo "Issue Body:"
-          echo "${{ github.event.issue.body }}"
-          echo "Issue Number: ${{ github.event.issue.number }}"
+          echo "${{ steps.get_content.outputs.body }}"
+          echo "Issue Number: ${{ steps.get_content.outputs.number }}"
 
       - name: Call Gemini API (Placeholder)
         run: |
