@@ -12,24 +12,29 @@ on:
 
 jobs:
   build-and-pr:
-    # ラベルによる起動か、手動実行の場合のみジョブを実行
-    if: (github.event.label.name == "gemini-task") || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Show Context Information
+      # このステップは、どのトリガーでも実行されます
+      - name: Show Event Name
+        run: echo "Workflow triggered by: ${{ github.event_name }}"
+
+      # これらのステップは、'issues' イベントで 'gemini-task' ラベルが付与された場合のみ実行されます
+      - name: Show Issue Context (Conditional)
+        if: github.event_name == 'issues' && github.event.label.name == 'gemini-task'
         run: |
-          echo "Workflow triggered by: ${{ github.event_name }}"
           echo "Issue Title: ${{ github.event.issue.title }}"
           echo "Issue Body:"
           echo "${{ github.event.issue.body }}"
           echo "Issue Number: ${{ github.event.issue.number }}"
 
       - name: Call Gemini API (Placeholder)
+        if: github.event_name == 'issues' && github.event.label.name == 'gemini-task'
         run: echo "TODO: Implement Gemini API call here."
 
       - name: Create Pull Request (Placeholder)
+        if: github.event_name == 'issues' && github.event.label.name == 'gemini-task'
         run: echo "TODO: Implement PR creation logic here."
