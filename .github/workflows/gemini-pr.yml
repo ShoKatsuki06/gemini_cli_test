@@ -18,13 +18,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # このステップは、どのトリガーでも実行されます
       - name: Show Event Name
         run: echo "Workflow triggered by: ${{ github.event_name }}"
 
-      # これらのステップは、'issues' イベントで 'gemini-task' ラベルが付与された場合のみ実行されます
-      - name: Show Issue Context (Conditional)
-        if: github.event_name == 'issues' && github.event.label.name == 'gemini-task'
+      - name: Show Issue Context
         run: |
           echo "Issue Title: ${{ github.event.issue.title }}"
           echo "Issue Body:"
@@ -32,9 +29,7 @@ jobs:
           echo "Issue Number: ${{ github.event.issue.number }}"
 
       - name: Call Gemini API (Placeholder)
-        if: github.event_name == 'issues' && github.event.label.name == 'gemini-task'
         run: echo "TODO: Implement Gemini API call here."
 
       - name: Create Pull Request (Placeholder)
-        if: github.event_name == 'issues' && github.event.label.name == 'gemini-task'
         run: echo "TODO: Implement PR creation logic here."
