@@ -3,7 +3,7 @@ name: Gemini Auto-Coding Task
 on:
   issues:
     types: [labeled]
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 jobs:
   build-and-pr:
@@ -25,7 +25,9 @@ jobs:
           echo "Issue Number: ${{ github.event.issue.number }}"
 
       - name: Call Gemini API (Placeholder)
-        run: echo "TODO: Implement Gemini API call here."
+        run: |
+          echo "TODO: Implement Gemini API call here."
 
       - name: Create Pull Request (Placeholder)
-        run: echo "TODO: Implement PR creation logic here."
+        run: |
+          echo "TODO: Implement PR creation logic here."
