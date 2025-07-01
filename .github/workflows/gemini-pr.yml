@@ -1,0 +1,39 @@
+# .github/workflows/gemini-pr.yml
+
+name: Gemini Auto-Coding Task
+
+# ワークフローが起動するトリガーを定義
+on:
+  issues:
+    types: [labeled]
+
+# ワークフローで実行されるジョブを定義
+jobs:
+  build-and-pr:
+    # Issueに 'gemini-task' ラベルが付与された場合のみジョブを実行
+    if: github.event.label.name == 'gemini-task'
+    runs-on: ubuntu-latest # ジョブを実行する仮想環境
+
+    steps:
+      # 1. リポジトリのコードをチェックアウト
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Issueの情報を取得して表示（デバッグ用）
+      - name: Get Issue Information
+        run: |
+          echo "Issue Title: ${{ github.event.issue.title }}"
+          echo "Issue Body:"
+          echo "${{ github.event.issue.body }}"
+          echo "Issue Number: ${{ github.event.issue.number }}"
+
+      # 3. ここからGemini APIを呼び出す処理を実装します
+      #    - Issueのタイトルと本文からプロンプトを生成
+      #    - PythonやJavaScriptのスクリプトを実行してGemini APIを呼び出す
+      - name: Call Gemini API (Placeholder)
+        run: echo "TODO: Implement Gemini API call here."
+
+      # 4. Geminiの生成したコードを元にブランチを作成し、PRを作成します
+      #    - gh cli (GitHub CLI) を使うと便利です
+      - name: Create Pull Request (Placeholder)
+        run: echo "TODO: Implement PR creation logic here."
