@@ -1,13 +1,35 @@
 # .github/workflows/gemini-pr.yml
 
-name: Simple Test Workflow
+name: Gemini Auto-Coding Task
 
 on:
-  workflow_dispatch: # 手動実行トリガーのみ
+  # 'gemini-task' ラベルが付与されたときに起動
+  issues:
+    types: [labeled]
+  
+  # 手動でActionsタブから実行できるようにする
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-and-pr:
+    # ラベルによる起動か、手動実行の場合のみジョブを実行
+    if: (github.event.label.name == "gemini-task") || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
+
     steps:
-      - name: Echo a message
-        run: echo "This is a simple test workflow."
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show Context Information
+        run: |
+          echo "Workflow triggered by: ${{ github.event_name }}"
+          echo "Issue Title: ${{ github.event.issue.title }}"
+          echo "Issue Body:"
+          echo "${{ github.event.issue.body }}"
+          echo "Issue Number: ${{ github.event.issue.number }}"
+
+      - name: Call Gemini API (Placeholder)
+        run: echo "TODO: Implement Gemini API call here."
+
+      - name: Create Pull Request (Placeholder)
+        run: echo "TODO: Implement PR creation logic here."
