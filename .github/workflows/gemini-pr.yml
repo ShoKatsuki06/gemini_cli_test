@@ -1,19 +1,15 @@
-# .github/workflows/gemini-pr.yml
-
 name: Gemini Auto-Coding Task
 
 on:
   # 'gemini-task' ラベルが付与されたときに起動
   issues:
     types: [labeled]
-  
-  # 手動でActionsタブから実行できるようにする
-  workflow_dispatch:
+  # 手動トリガー
+  workflow_dispatch: {}
 
 jobs:
   build-and-pr:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
